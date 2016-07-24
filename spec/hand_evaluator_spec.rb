@@ -3,26 +3,26 @@ require_relative "../lib/hand_evaluator"
 
 describe HandEvaluator do
   describe "#rank_suit_separator" do
-    hand = %w(2S 2D AH 3S 5S)
-    separated_hand = [["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]]
     it "separates rank and suit of a hand" do 
-      expect(HandEvaluator.new.rank_suit_separator(hand)).to eq separated_hand
+      expect_equality(%w(2S 2D AH 3S 5S), [["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]]) do |hand|
+        HandEvaluator.new.rank_suit_separator(hand)
+      end
     end
   end
   
   describe "#rank_separator" do
-    separated_hand = [["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]]
-    rank_array = ["2", "2", "A", "3", "5"]
     it "creates an array of a hands card ranks" do
-      expect(HandEvaluator.new.rank_separator(separated_hand)).to eq rank_array 
+      expect_equality([["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]],  ["2", "2", "A", "3", "5"]) do |hand|
+        HandEvaluator.new.rank_separator(hand)
+      end
     end
   end
 
   describe "#suit_separator" do
-    separated_hand = [["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]]
-    suit_array = ["S", "D", "H", "S", "S"]
     it "creates an array of a hands cards suits" do
-      expect(HandEvaluator.new.suit_separator(separated_hand)).to eq suit_array
+      expect_equality([["2", "S"], ["2", "D"], ["A", "H"], ["3", "S"], ["5", "S"]], ["S", "D", "H", "S", "S"]) do |hand|
+        HandEvaluator.new.suit_separator(hand)
+      end
     end
   end
 
@@ -105,5 +105,9 @@ describe HandEvaluator do
       to eq(higher)
     expect(HandEvaluator.new.return_stronger_hand(lower, higher)).
       to eq(higher)
+  end
+
+  def expect_equality(hand, result, &block)
+    expect(yield(hand)).to eq result
   end
 end
